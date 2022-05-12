@@ -111,6 +111,7 @@
 Ticker tk_10ms;
 WiFiClient client;
 WiFiUDP ntpUDP;
+HTTPClient http;
 NTPClient timeClient(ntpUDP,ntp_serv,ntp_offset,ntp_interval);
 //===================================================================================
 //    Variables
@@ -157,7 +158,7 @@ float ogs_bv,ogs_bi;
 //===================================================================================
 //    function get request
 float blynk_get(String auth,int vpin) {
-  HTTPClient http;
+
   String url = "http://";
   url += blynk_serv;
   url += ":";
@@ -166,8 +167,7 @@ float blynk_get(String auth,int vpin) {
   url += auth;
   url += "/get/v";
   url += String(vpin);
-  WiFiClient wifi;
-  http.begin(wifi,url);
+  http.begin(client,url);
   int httpCode = http.GET();
   if (httpCode == 200) {
     String content = http.getString();
